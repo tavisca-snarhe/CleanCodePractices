@@ -14,5 +14,13 @@ namespace CleanCodePractices
             Id = Guid.NewGuid();
             Price = 0;
         }
+        
+        public PhysicalProduct(string name, double price, Dimension dimension)
+        {
+            Id = Guid.NewGuid();
+            Name = name;
+            Price = price;
+            Dimension = dimension;
+        }
     }
 }

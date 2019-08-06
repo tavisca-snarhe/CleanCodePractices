@@ -44,8 +44,7 @@ namespace CleanCodePractices
         {
             Quantity += value;
             TotalPrice += _product.Price * value;
-
-            // TotalDiscount = ;   
+            
             DateUpdated = new DateTime();
         }
     }

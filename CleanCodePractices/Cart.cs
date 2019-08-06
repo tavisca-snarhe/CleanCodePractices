@@ -5,7 +5,7 @@ namespace CleanCodePractices
 {
     public class Cart
     {
-        public Guid _id { get; private set; }
+        public Guid Id { get; private set; }
         List<Item> _items;
         public DateTime DateCreated { get; private set; }
         public DateTime DateUpdated { get; private set; }
@@ -13,9 +13,9 @@ namespace CleanCodePractices
         public double TotalPrice { get; private set; }
         public double TotalDiscountedPrice { get; private set; }
 
-        Cart()
+        public Cart()
         {
-            _id = Guid.NewGuid();
+            Id = Guid.NewGuid();
             _items = new List<Item>();
             DateCreated = DateUpdated = new DateTime();
             TotalDiscount = TotalDiscountedPrice = TotalPrice = 0;
