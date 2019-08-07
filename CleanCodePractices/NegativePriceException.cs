@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace CleanCodePractices
 {
     [Serializable]
-    internal class NegativePriceException : Exception
+    public class NegativePriceException : Exception
     {
         public NegativePriceException()
         {

@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace CleanCodePractices
 {
     [Serializable]
-    internal class NegativeQuantityException : Exception
+    public class NegativeQuantityException : Exception
     {
         public NegativeQuantityException()
         {

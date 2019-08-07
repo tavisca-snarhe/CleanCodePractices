@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace CleanCodePractices
 {
     [Serializable]
-    internal class NegativePercentageException : Exception
+    public class NegativePercentageException : Exception
     {
         public NegativePercentageException()
         {

@@ -45,13 +45,19 @@ namespace CleanCodePractices
 
         public double GetDiscountedPrice()
         {
-            if(DiscountPercentage == 0)
-                return GetTotalPrice();
+            double ProductsDiscountedPrice = 0;
 
-            double totalPrice = GetTotalPrice();
-            double discountedPrice = totalPrice - (totalPrice * (DiscountPercentage / 100));
+            for (int i = 0; i < _cartItems.Count; i++)
+            {
+                ProductsDiscountedPrice += _cartItems[i].GetDiscountedPrice();
+            }
 
-            return discountedPrice;
+            if (DiscountPercentage == 0)
+                return ProductsDiscountedPrice;
+
+            double TotalDiscountedPrice = ProductsDiscountedPrice - (ProductsDiscountedPrice * DiscountPercentage / 100);
+
+            return TotalDiscountedPrice;
         }
     }
 }

@@ -17,5 +17,10 @@
         {
             return (Product.Price * Quantity);
         }
+
+        public double GetDiscountedPrice()
+        {
+            return (Product.GetDiscountedPrice() * Quantity);
+        }
     }
 }
