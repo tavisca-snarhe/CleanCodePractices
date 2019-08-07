@@ -1,56 +1,57 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace CleanCodePractices
 {
     public class Cart
     {
-        public Guid Id { get; private set; }
-        List<Item> _items;
-        public DateTime DateCreated { get; private set; }
-        public DateTime DateUpdated { get; private set; }
-        public double TotalDiscount { get; private set; }
-        public double TotalPrice { get; private set; }
-        public double TotalDiscountedPrice { get; private set; }
+        private List<CartItem> _cartItems;
+        public double DiscountPercentage;
 
         public Cart()
         {
-            Id = Guid.NewGuid();
-            _items = new List<Item>();
-            DateCreated = DateUpdated = new DateTime();
-            TotalDiscount = TotalDiscountedPrice = TotalPrice = 0;
+            DiscountPercentage = 0;
+            _cartItems = new List<CartItem>();
         }
 
-        public List<Item> GetCartItems()
+        public void SetDiscountPercentage(double discountPercentage)
         {
-            return _items;
+            if (discountPercentage < 0)
+                throw new NegativePercentageException();
+
+            DiscountPercentage = discountPercentage;
         }
 
-        public void AddItem(Item item)
+        public void AddItem(Product product, int quantity)
         {
-            _items.Add(item);
-            TotalPrice += item.TotalPrice;
-            TotalDiscount += item.TotalDiscount;
-            TotalDiscountedPrice = TotalPrice - TotalDiscount;
-            DateUpdated = new DateTime();
+            _cartItems.Add(new CartItem(product, quantity));
         }
 
-        public void RemoveItem(Guid itemId)
+        public List<CartItem> GetItems()
         {
-            Item itemToRemove = null;
-            foreach(Item item in _items)
+            return _cartItems.Select(item => new CartItem(item.Product, item.Quantity)).ToList();
+        }
+
+        public double GetTotalPrice()
+        {
+            double totalPrice = 0;
+            for(int i=0;i<_cartItems.Count;i++)
             {
-                itemToRemove = item.ItemId == itemId ? item : null;
-                if (itemToRemove != null)
-                {
-                    _items.Remove(itemToRemove);
-                    TotalPrice -= item.TotalPrice;
-                    TotalDiscount -= item.TotalDiscount;
-                    TotalDiscountedPrice = TotalPrice - TotalDiscount;
-                    DateUpdated = new DateTime();
-                    return;
-                }
+                totalPrice += _cartItems[i].GetTotalPrice();
             }
+
+            return totalPrice;
+        }
+
+        public double GetDiscountedPrice()
+        {
+            if(DiscountPercentage == 0)
+                return GetTotalPrice();
+
+            double totalPrice = GetTotalPrice();
+            double discountedPrice = totalPrice - (totalPrice * (DiscountPercentage / 100));
+
+            return discountedPrice;
         }
     }
 }
