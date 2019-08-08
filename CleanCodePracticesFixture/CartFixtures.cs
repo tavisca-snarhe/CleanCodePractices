@@ -65,5 +65,38 @@ namespace CleanCodePracticesFixture
             Assert.Equal(900, MyCart.GetDiscountedPrice());
         }
 
+        [Fact]
+        public void User_Should_Be_Able_To_Apply_Fixed_Discount()
+        {
+            MyCart = new Cart(20);
+            Vegetable vegetable = new Vegetable(10);
+            Product potato = new Product("Potato", 100, vegetable);
+            MyCart.AddItem(potato, 10);
+
+            Assert.Equal(800, MyCart.GetDiscountedPrice());
+        }
+
+        [Fact]
+        public void User_Should_Be_Able_To_Apply_Category_Discount()
+        {
+            MyCart = new Cart("CATEGORYWISE");
+            Vegetable vegetable = new Vegetable(10);
+            Product potato = new Product("Potato", 100, vegetable);
+            MyCart.AddItem(potato, 10);
+
+            Assert.Equal(900, MyCart.GetDiscountedPrice());
+        }
+
+        [Fact]
+        public void User_Should_Be_Able_To_Apply_Configed_Discount()
+        {
+            MyCart = new Cart("CONFIG");
+            Vegetable vegetable = new Vegetable(10);
+            Product potato = new Product("Potato", 100, vegetable);
+            MyCart.AddItem(potato, 10);
+
+            Assert.Equal(850, MyCart.GetDiscountedPrice());
+        }
+
     }
 }

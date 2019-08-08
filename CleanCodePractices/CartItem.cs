@@ -9,6 +9,7 @@
         {
             if (quantity < 0)
                 throw new NegativeQuantityException();
+
             Product = product;
             Quantity = quantity;
         }

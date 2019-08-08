@@ -7,10 +7,40 @@ namespace CleanCodePractices
     {
         private List<CartItem> _cartItems;
         public double DiscountPercentage;
+        public string DiscountType;
 
         public Cart()
         {
             DiscountPercentage = 0;
+            DiscountType = "FIXED";
+            _cartItems = new List<CartItem>();
+        }
+
+        public Cart(int discountPercentage)
+        {
+            if (discountPercentage < 0)
+                throw new NegativePercentageException();
+
+            DiscountPercentage = discountPercentage;
+            DiscountType = "FIXED";
+            _cartItems = new List<CartItem>();
+        }
+
+        public Cart(string discountType)
+        {
+            switch (discountType)
+            {
+                case "CONFIG":
+                    DiscountType = "CONFIG";
+                    break;
+
+                case "CATEGORYWISE":
+                    DiscountType = "CATEGORYWISE";
+                    break;
+
+                default:
+                    throw new UnknownDiscountCategoryException();
+            }
             _cartItems = new List<CartItem>();
         }
 
@@ -20,6 +50,7 @@ namespace CleanCodePractices
                 throw new NegativePercentageException();
 
             DiscountPercentage = discountPercentage;
+            DiscountType = "FIXED";
         }
 
         public void AddItem(Product product, int quantity)
@@ -45,19 +76,31 @@ namespace CleanCodePractices
 
         public double GetDiscountedPrice()
         {
-            double ProductsDiscountedPrice = 0;
+            double DiscountedPrice  = 0;
+            double ProductsTotalPrice = GetTotalPrice();
 
-            for (int i = 0; i < _cartItems.Count; i++)
+            switch (DiscountType)
             {
-                ProductsDiscountedPrice += _cartItems[i].GetDiscountedPrice();
+                case "FIXED":
+                    DiscountedPrice = ProductsTotalPrice - (ProductsTotalPrice * DiscountPercentage / 100);
+                    break;
+
+                case "CATEGORYWISE":
+                    for(int i = 0; i < _cartItems.Count; i++)
+                    {
+                        DiscountedPrice += _cartItems[i].GetDiscountedPrice();
+                    }
+                    break;
+
+                case "CONFIG":
+                    DiscountedPrice = ProductsTotalPrice - (ProductsTotalPrice * AppConfigs.DiscountPercentage / 100);
+                    break;
+
+                default:
+                    throw new UnknownDiscountCategoryException();
             }
 
-            if (DiscountPercentage == 0)
-                return ProductsDiscountedPrice;
-
-            double TotalDiscountedPrice = ProductsDiscountedPrice - (ProductsDiscountedPrice * DiscountPercentage / 100);
-
-            return TotalDiscountedPrice;
+            return DiscountedPrice;
         }
     }
 }
